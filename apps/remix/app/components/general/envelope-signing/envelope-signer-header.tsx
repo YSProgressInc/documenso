@@ -33,13 +33,19 @@ export const EnvelopeSignerHeader = () => {
   return (
     <nav className="embed--DocumentWidgetHeader flex max-w-screen flex-row justify-between border-border border-b bg-background px-4 py-3 md:px-6">
       {/* Left side - Logo and title */}
-      <div className="flex min-w-0 flex-1 items-center space-x-2 md:w-auto md:flex-none">
+      <div
+        className={
+          hasCustomBrandingLogo && !isEmbedSigning
+            ? 'flex min-w-0 flex-1 flex-col items-start gap-1.5 md:w-auto md:flex-none md:flex-row md:items-center md:gap-3'
+            : 'flex min-w-0 flex-1 items-center space-x-2 md:w-auto md:flex-none'
+        }
+      >
         {!isEmbedSigning &&
           (hasCustomBrandingLogo ? (
             <img
               src={`/api/branding/logo/team/${envelope.teamId}`}
-              alt={`${envelope.team.name}'s Logo`}
-              className="h-6 w-auto flex-shrink-0"
+              alt={envelope.team.name}
+              className="h-9 w-auto max-w-full flex-shrink-0 md:h-11"
             />
           ) : (
             <Link to="/" className="flex-shrink-0">
@@ -48,7 +54,10 @@ export const EnvelopeSignerHeader = () => {
             </Link>
           ))}
 
-        <h1 title={envelope.title} className="min-w-0 truncate font-semibold text-base text-foreground md:hidden">
+        <h1
+          title={envelope.title}
+          className="min-w-0 max-w-full truncate font-semibold text-base text-foreground md:hidden"
+        >
           {envelope.title}
         </h1>
 

@@ -46,7 +46,8 @@ const generateStyles = (recipientColor: TRecipientColor): RecipientColorStyles =
   const { active, hover, groupHover, groupHoverFieldItem } = CSS_VARIANT;
 
   const name = `recipient-${recipientColor}`;
-  const value = getComputedStyle(document.documentElement).getPropertyValue(`--${name}`);
+  // Read from <body>: organisation branding scopes its overrides to the body.
+  const value = getComputedStyle(document.body ?? document.documentElement).getPropertyValue(`--${name}`);
   const color = colord(`hsl(${value})`);
 
   return {

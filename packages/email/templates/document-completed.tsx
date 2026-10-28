@@ -1,7 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
+import { BrandedDocumentCompleted } from '../brand/branded-templates';
 import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import type { TemplateDocumentCompletedProps } from '../template-components/template-document-completed';
 import { TemplateDocumentCompleted } from '../template-components/template-document-completed';
@@ -22,6 +23,20 @@ export const DocumentCompletedEmailTemplate = ({
   const { _ } = useLingui();
 
   const previewText = msg`Completed Document`;
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedDocumentCompleted
+        documentName={documentName}
+        downloadLink={downloadLink}
+        assetBaseUrl={assetBaseUrl}
+        customBody={customBody}
+        reportUrl={reportUrl}
+      />
+    );
+  }
 
   return (
     <Html>

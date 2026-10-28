@@ -86,11 +86,32 @@ export const resolveEmailBrandingColors = (
   const resolve = (value: string | null | undefined, fallback: string): string =>
     normalizeColorToHex(value) ?? fallback;
 
+  // A tenant that sets its own text and background but not the muted tones
+  // would otherwise get the default slate muted text next to its own palette.
+  // Derive the muted tones from the tenant's colours instead.
+  const customForeground = normalizeColorToHex(brandingColors.foreground);
+  const customBackground = normalizeColorToHex(brandingColors.background);
+
+  const mix = (from: string, to: string, amount: number): string => {
+    const a = colord(from).toRgb();
+    const b = colord(to).toRgb();
+    const channel = (x: number, y: number) => Math.round(x + (y - x) * amount);
+
+    return colord({ r: channel(a.r, b.r), g: channel(a.g, b.g), b: channel(a.b, b.b) }).toHex();
+  };
+
+  const derivedMutedForeground =
+    customForeground && customBackground ? mix(customForeground, customBackground, 0.3) : null;
+  const derivedMuted = customForeground && customBackground ? mix(customBackground, customForeground, 0.06) : null;
+
   return {
     background: resolve(brandingColors.background, DEFAULT_BRAND_COLORS.background),
     foreground: resolve(brandingColors.foreground, DEFAULT_BRAND_COLORS.foreground),
-    muted: resolve(brandingColors.muted, DEFAULT_BRAND_COLORS.muted),
-    mutedForeground: resolve(brandingColors.mutedForeground, DEFAULT_BRAND_COLORS.mutedForeground),
+    muted: resolve(brandingColors.muted, derivedMuted ?? DEFAULT_BRAND_COLORS.muted),
+    mutedForeground: resolve(
+      brandingColors.mutedForeground,
+      derivedMutedForeground ?? DEFAULT_BRAND_COLORS.mutedForeground,
+    ),
     primary: resolve(brandingColors.primary, DEFAULT_BRAND_COLORS.primary),
     primaryForeground: resolve(brandingColors.primaryForeground, DEFAULT_BRAND_COLORS.primaryForeground),
     secondary: resolve(brandingColors.secondary, DEFAULT_BRAND_COLORS.secondary),

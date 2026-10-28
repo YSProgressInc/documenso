@@ -1,7 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
+import { BrandedDocumentCancel } from '../brand/branded-templates';
 import { Body, Container, Head, Hr, Html, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import type { TemplateDocumentCancelProps } from '../template-components/template-document-cancel';
 import { TemplateDocumentCancel } from '../template-components/template-document-cancel';
@@ -19,6 +20,19 @@ export const DocumentCancelTemplate = ({
   const { _ } = useLingui();
 
   const previewText = msg`${inviterName} has cancelled the document ${documentName}, you don't need to sign it anymore.`;
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedDocumentCancel
+        inviterName={inviterName}
+        documentName={documentName}
+        assetBaseUrl={assetBaseUrl}
+        cancellationReason={cancellationReason}
+      />
+    );
+  }
 
   return (
     <Html>

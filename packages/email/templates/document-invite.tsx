@@ -4,8 +4,9 @@ import { useLingui } from '@lingui/react';
 import { Trans } from '@lingui/react/macro';
 import type { RecipientRole } from '@prisma/client';
 import { OrganisationType } from '@prisma/client';
-
+import { BrandedDocumentInvite } from '../brand/branded-templates';
 import { Body, Container, Head, Hr, Html, Link, Preview, Section, Text } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import type { TemplateDocumentInviteProps } from '../template-components/template-document-invite';
@@ -59,6 +60,26 @@ export const DocumentInviteEmailTemplate = ({
 
   if (selfSigner) {
     previewText = msg`Please ${action} your document ${documentName}`;
+  }
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedDocumentInvite
+        inviterName={inviterName}
+        documentName={documentName}
+        signDocumentLink={signDocumentLink}
+        assetBaseUrl={assetBaseUrl}
+        role={role}
+        customBody={customBody}
+        reportUrl={reportUrl}
+        teamName={teamName}
+        includeSenderDetails={includeSenderDetails}
+        organisationType={organisationType}
+        selfSigner={selfSigner}
+      />
+    );
   }
 
   return (

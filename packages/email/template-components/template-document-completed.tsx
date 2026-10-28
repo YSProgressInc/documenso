@@ -45,7 +45,7 @@ export const TemplateDocumentCompleted = ({
 
         <Section className="mt-8 mb-6 text-center">
           <Button
-            className="rounded-lg border border-border border-solid px-4 py-2 text-center font-medium text-foreground text-sm no-underline"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-center font-medium text-base text-primary-foreground no-underline"
             href={downloadLink}
           >
             <Img

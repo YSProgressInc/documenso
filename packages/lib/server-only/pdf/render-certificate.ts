@@ -580,7 +580,10 @@ const renderBranding = async ({ qrToken, i18n }: { qrToken: string | null; i18n:
     height: brandingHeight,
   });
 
-  const logoPath = path.join(process.cwd(), 'public/static/logo.png');
+  // A self-hosted instance can put its own logo on the certificate and audit log
+  // pages by adding public/static/brand-certificate-logo.png.
+  const brandLogoPath = path.join(process.cwd(), 'public/static/brand-certificate-logo.png');
+  const logoPath = fs.existsSync(brandLogoPath) ? brandLogoPath : path.join(process.cwd(), 'public/static/logo.png');
   const logo = fs.readFileSync(logoPath);
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

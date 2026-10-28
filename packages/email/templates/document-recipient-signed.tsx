@@ -1,7 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
+import { BrandedRecipientSigned } from '../brand/branded-templates';
 import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateDocumentRecipientSigned } from '../template-components/template-document-recipient-signed';
 import { TemplateFooter } from '../template-components/template-footer';
@@ -24,6 +25,19 @@ export const DocumentRecipientSignedEmailTemplate = ({
   const recipientReference = recipientName || recipientEmail;
 
   const previewText = msg`${recipientReference} has signed ${documentName}`;
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedRecipientSigned
+        documentName={documentName}
+        recipientName={recipientName}
+        recipientEmail={recipientEmail}
+        assetBaseUrl={assetBaseUrl}
+      />
+    );
+  }
 
   return (
     <Html>

@@ -88,10 +88,12 @@ export const run = async ({ payload, io }: { payload: TSendDocumentCompletedEmai
       const file = await getFileServerSide(envelopeItem.documentData);
 
       // Use the envelope title for version 1, and the envelope item title for version 2.
-      const fileNameToUse = envelope.internalVersion === 1 ? envelope.title : envelopeItem.title + '.pdf';
+      const fileNameToUse = envelope.internalVersion === 1 ? envelope.title : envelopeItem.title;
 
+      // Item titles usually keep the uploaded file's extension already; adding
+      // another one produced "agreement.pdf.pdf".
       return {
-        filename: fileNameToUse.endsWith('.pdf') ? fileNameToUse : fileNameToUse + '.pdf',
+        filename: fileNameToUse.toLowerCase().endsWith('.pdf') ? fileNameToUse : fileNameToUse + '.pdf',
         content: Buffer.from(file),
         contentType: 'application/pdf',
       };
@@ -147,7 +149,7 @@ export const run = async ({ payload, io }: { payload: TSendDocumentCompletedEmai
       ],
       from: senderEmail,
       replyTo: replyToEmail,
-      subject: i18n._(msg`Signing Complete!`),
+      subject: i18n._(msg`Completed: "${envelope.title}"`),
       html,
       text,
       attachments: completedDocumentEmailAttachments,
@@ -247,7 +249,7 @@ export const run = async ({ payload, io }: { payload: TSendDocumentCompletedEmai
         subject:
           isDirectTemplate && envelope.documentMeta?.subject
             ? renderCustomEmailTemplate(envelope.documentMeta.subject, customEmailTemplate)
-            : i18n._(msg`Signing Complete!`),
+            : i18n._(msg`Completed: "${envelope.title}"`),
         html,
         text,
         attachments: completedDocumentEmailAttachments,

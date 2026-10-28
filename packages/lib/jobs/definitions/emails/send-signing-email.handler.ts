@@ -129,7 +129,7 @@ export const run = async ({ payload, io }: { payload: TSendSigningEmailJobDefini
   const recipientActionVerb = i18n._(RECIPIENT_ROLES_DESCRIPTION[recipient.role].actionVerb).toLowerCase();
 
   let emailMessage = customEmail?.message || '';
-  let emailSubject = i18n._(msg`Please ${recipientActionVerb} this document`);
+  let emailSubject = i18n._(msg`Please ${recipientActionVerb} "${envelope.title}"`);
 
   if (selfSigner) {
     emailMessage = i18n._(

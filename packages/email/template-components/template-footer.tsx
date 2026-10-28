@@ -29,7 +29,7 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
         </Text>
       )}
 
-      {isDocument && !branding.brandingHidePoweredBy && (
+      {isDocument && !branding.brandingEnabled && !branding.brandingHidePoweredBy && (
         <Text className="my-4 text-base text-muted-foreground">
           <Trans>
             This document was sent using{' '}
@@ -56,8 +56,8 @@ export const TemplateFooter = ({ isDocument = true, reportUrl }: TemplateFooterP
 
       {branding.brandingEnabled && safeBrandingUrl && (
         <Text className="my-8 text-muted-foreground text-sm">
-          <Link href={safeBrandingUrl} target="_blank">
-            {safeBrandingUrl}
+          <Link className="text-primary" href={safeBrandingUrl} target="_blank">
+            {safeBrandingUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
           </Link>
         </Text>
       )}

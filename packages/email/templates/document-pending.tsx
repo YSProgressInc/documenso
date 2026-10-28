@@ -1,7 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
+import { BrandedDocumentPending } from '../brand/branded-templates';
 import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import type { TemplateDocumentPendingProps } from '../template-components/template-document-pending';
 import { TemplateDocumentPending } from '../template-components/template-document-pending';
@@ -16,6 +17,12 @@ export const DocumentPendingEmailTemplate = ({
   const { _ } = useLingui();
 
   const previewText = msg`Pending Document`;
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return <BrandedDocumentPending documentName={documentName} assetBaseUrl={assetBaseUrl} />;
+  }
 
   return (
     <Html>

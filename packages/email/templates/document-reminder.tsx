@@ -2,8 +2,9 @@ import { RECIPIENT_ROLES_DESCRIPTION } from '@documenso/lib/constants/recipient-
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
 import { RecipientRole } from '@prisma/client';
-
+import { BrandedDocumentReminder } from '../brand/branded-templates';
 import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateCustomMessageBody } from '../template-components/template-custom-message-body';
 import { TemplateDocumentReminder } from '../template-components/template-document-reminder';
@@ -36,6 +37,22 @@ export const DocumentReminderEmailTemplate = ({
   const action = _(RECIPIENT_ROLES_DESCRIPTION[role].actionVerb).toLowerCase();
 
   const previewText = msg`Reminder to ${action} ${documentName}`;
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedDocumentReminder
+        recipientName={recipientName}
+        documentName={documentName}
+        signDocumentLink={signDocumentLink}
+        assetBaseUrl={assetBaseUrl}
+        role={role}
+        customBody={customBody}
+        reportUrl={reportUrl}
+      />
+    );
+  }
 
   return (
     <Html>

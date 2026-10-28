@@ -1,10 +1,6 @@
 export {
-  Body,
-  Button,
   Column,
-  Container,
   Font,
-  Head,
   Heading,
   Hr,
   Html,
@@ -15,5 +11,6 @@ export {
   render,
   Section,
   Tailwind,
-  Text,
 } from 'react-email';
+export { Body, Button, Container, Text } from './brand-components';
+export { Head } from './brand-head';

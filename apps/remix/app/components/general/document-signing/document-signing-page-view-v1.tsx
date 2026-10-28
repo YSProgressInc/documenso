@@ -151,8 +151,8 @@ export const DocumentSigningPageViewV1 = ({
         {hasCustomBrandingLogo && (
           <img
             src={`/api/branding/logo/team/${document.teamId}`}
-            alt={`${document.team.name}'s Logo`}
-            className="mb-4 h-12 w-12 md:mb-2"
+            alt={document.team.name}
+            className="mb-4 h-11 w-auto md:mb-2"
           />
         )}
         <h1

@@ -1,7 +1,8 @@
 import { msg } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react';
-
+import { BrandedRejectionConfirmed } from '../brand/branded-templates';
 import { Body, Container, Head, Html, Preview, Section } from '../components';
+import { useBranding } from '../providers/branding';
 import { TemplateBrandingLogo } from '../template-components/template-branding-logo';
 import { TemplateDocumentRejectionConfirmed } from '../template-components/template-document-rejection-confirmed';
 import { TemplateFooter } from '../template-components/template-footer';
@@ -24,6 +25,19 @@ export function DocumentRejectionConfirmedEmail({
   const { _ } = useLingui();
 
   const previewText = _(msg`You have rejected the document '${documentName}'`);
+
+  const branding = useBranding();
+
+  if (branding.brandingEnabled) {
+    return (
+      <BrandedRejectionConfirmed
+        documentName={documentName}
+        documentOwnerName={documentOwnerName}
+        reason={reason}
+        assetBaseUrl={assetBaseUrl}
+      />
+    );
+  }
 
   return (
     <Html>

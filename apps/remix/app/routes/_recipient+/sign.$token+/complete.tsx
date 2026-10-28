@@ -178,7 +178,8 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
             <SigningCard3D
               name={recipientName}
               signature={signatures.at(0)}
-              signingCelebrationImage={signingCelebration}
+              // Branded instances leave out Documenso's celebration artwork.
+              signingCelebrationImage={branding.allowCustomBranding ? undefined : signingCelebration}
             />
 
             <h2 className="mt-6 max-w-[35ch] text-center font-semibold text-2xl leading-normal md:text-3xl lg:text-4xl">
@@ -249,11 +250,14 @@ export default function CompletedSigningPage({ loaderData }: Route.ComponentProp
               ))}
 
             <div className="mt-8 flex w-full max-w-xs flex-col items-stretch gap-4 md:w-auto md:max-w-none md:flex-row md:items-center">
-              <DocumentShareButton
-                documentId={document.id}
-                token={recipient.token}
-                className="w-full max-w-none md:flex-1"
-              />
+              {/* Signed contracts are private: branded instances do not offer social sharing. */}
+              {!branding.allowCustomBranding && (
+                <DocumentShareButton
+                  documentId={document.id}
+                  token={recipient.token}
+                  className="w-full max-w-none md:flex-1"
+                />
+              )}
 
               {isDocumentCompleted(document) && (
                 <EnvelopeDownloadDialog
