@@ -22,6 +22,9 @@ import type { TDocumentAuditLogBaseSchema } from '../../types/document-audit-log
 import { svgToPng } from '../../utils/images/svg-to-png';
 import { ensureFontLibrary } from './helpers';
 
+// Branded instances (NEXT_PUBLIC_BRAND_NAME set) outline signatures in the YS Progress accent.
+const SIGNATURE_BOX_RGB = process.env.NEXT_PUBLIC_BRAND_NAME ? '128, 44, 34' : '122, 196, 85';
+
 type ColumnWidths = [number, number, number];
 
 type BaseAuditLog = Pick<TDocumentAuditLogBaseSchema, 'createdAt' | 'ipAddress' | 'userAgent'>;
@@ -333,7 +336,7 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       y: 2,
       width: maxSignatureWidth,
       height: signatureHeight,
-      stroke: 'rgba(122, 196, 85, 0.6)',
+      stroke: `rgba(${SIGNATURE_BOX_RGB}, 0.6)`,
       strokeWidth: 1,
       cornerRadius: 8,
     });
@@ -344,7 +347,7 @@ const renderColumnTwo = (options: RenderColumnOptions) => {
       y: 0,
       width: maxSignatureWidth + 4,
       height: signatureHeight + 4,
-      stroke: 'rgba(122, 196, 85, 0.1)',
+      stroke: `rgba(${SIGNATURE_BOX_RGB}, 0.1)`,
       strokeWidth: 4,
       cornerRadius: 8,
     });

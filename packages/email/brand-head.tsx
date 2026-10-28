@@ -13,6 +13,7 @@ import { Head as ReactEmailHead } from 'react-email';
  * has enough contrast with either background.
  */
 const DARK_MODE_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Spectral:wght@600&family=Hanken+Grotesk:wght@400;500;600&display=swap');
 :root { color-scheme: light dark; supported-color-schemes: light dark; }
 .ys-email-bg { background-color: #f7f3ec; }
 .ys-email-bg, .ys-email-bg td, .ys-email-bg p, .ys-email-bg a {

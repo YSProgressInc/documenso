@@ -349,10 +349,18 @@ export const MessageQuote = ({ from, children }: { from?: string; children: Reac
         fontSize: '15px',
         lineHeight: '24px',
         color: C.ink,
-        whiteSpace: 'pre-line',
       }}
     >
-      {children}
+      {/* Line breaks as <br> so the plain-text version keeps them too. */}
+      {typeof children === 'string'
+        ? children.split('\n').map((line, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: lines have no identity of their own
+            <Fragment key={index}>
+              {index > 0 && <br />}
+              {line}
+            </Fragment>
+          ))
+        : children}
     </Text>
     {from && (
       <Text
