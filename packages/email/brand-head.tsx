@@ -25,6 +25,7 @@ const DARK_MODE_CSS = `
   .ys-email-logo-dark { display: block !important; max-height: none !important; overflow: visible !important; }
   body, .ys-email-bg:not(.ys-b-page), .ys-email-bg:not(.ys-b-page) table, .ys-email-bg:not(.ys-b-page) td { background-color: #1d1a17 !important; }
   body.ys-b-page, .ys-email-bg.ys-b-page, .ys-email-bg.ys-b-page > table > tbody > tr > td { background-color: #171411 !important; }
+  .ys-b-shell, .ys-email-bg .ys-b-shell { background-color: #171411 !important; }
   .ys-email-bg .ys-b-card { background-color: #221e1a !important; border-color: #3a332c !important; }
   .ys-email-bg .ys-b-chip { background-color: #2b2621 !important; border-color: #3a332c !important; }
   .ys-email-bg .ys-b-title, .ys-email-bg .ys-b-strong { color: #f3ede3 !important; }
@@ -42,6 +43,7 @@ const DARK_MODE_CSS = `
 }
 [data-ogsb] body, [data-ogsb] .ys-email-bg:not(.ys-b-page), [data-ogsb] .ys-email-bg:not(.ys-b-page) table, [data-ogsb] .ys-email-bg:not(.ys-b-page) td { background-color: #1d1a17 !important; }
 [data-ogsb] .ys-email-bg.ys-b-page, [data-ogsb] .ys-email-bg.ys-b-page > table > tbody > tr > td { background-color: #171411 !important; }
+[data-ogsb] .ys-b-shell { background-color: #171411 !important; }
 [data-ogsb] .ys-b-card { background-color: #221e1a !important; }
 [data-ogsb] .ys-b-chip { background-color: #2b2621 !important; }
 [data-ogsc] .ys-b-title, [data-ogsc] .ys-b-strong { color: #f3ede3 !important; }

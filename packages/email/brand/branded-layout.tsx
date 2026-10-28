@@ -121,27 +121,50 @@ export const BrandedLayout = ({ preview, assetBaseUrl, reportUrl, children }: Br
       <Body className="ys-b-page" style={{ margin: 0, padding: 0, backgroundColor: C.paper, fontFamily: F.body }}>
         <Preview>{preview}</Preview>
 
-        <Container style={{ maxWidth: '560px', margin: '0 auto', padding: '0 16px' }}>
-          {header}
+        {/* The page colour sits on a full-width table, not only on <body>: some mail apps
+            (iOS) turn <body> into a div with their own class, so dark-mode rules aimed at the
+            body never match and light text would land on a light page. */}
+        <Section className="ys-b-shell" style={{ width: '100%', backgroundColor: C.paper }}>
+          <Container style={{ maxWidth: '560px', margin: '0 auto', padding: '0 16px' }}>
+            {header}
 
-          <Section
-            className="ys-b-card"
-            style={{
-              backgroundColor: C.card,
-              border: `1px solid ${C.line}`,
-              borderRadius: '14px',
-              padding: '36px 36px 32px',
-            }}
-          >
-            {children}
-          </Section>
+            <Section
+              className="ys-b-card"
+              style={{
+                backgroundColor: C.card,
+                border: `1px solid ${C.line}`,
+                borderRadius: '14px',
+                padding: '36px 36px 32px',
+              }}
+            >
+              {children}
+            </Section>
 
-          <Section style={{ padding: '28px 8px 40px', textAlign: 'center' }}>
-            {reportUrl && (
+            <Section style={{ padding: '28px 8px 40px', textAlign: 'center' }}>
+              {reportUrl && (
+                <Text
+                  className="ys-b-soft"
+                  style={{
+                    margin: '0 0 16px',
+                    fontFamily: F.body,
+                    fontSize: '13px',
+                    lineHeight: '20px',
+                    color: C.inkSoft,
+                    textAlign: 'center',
+                  }}
+                >
+                  Not expecting this email?{' '}
+                  <Link className="ys-b-link" href={reportUrl} style={{ color: C.accent, textDecoration: 'underline' }}>
+                    Report it
+                  </Link>
+                  . Never sign a document you don&apos;t recognise.
+                </Text>
+              )}
+
               <Text
                 className="ys-b-soft"
                 style={{
-                  margin: '0 0 16px',
+                  margin: 0,
                   fontFamily: F.body,
                   fontSize: '13px',
                   lineHeight: '20px',
@@ -149,51 +172,33 @@ export const BrandedLayout = ({ preview, assetBaseUrl, reportUrl, children }: Br
                   textAlign: 'center',
                 }}
               >
-                Not expecting this email?{' '}
-                <Link className="ys-b-link" href={reportUrl} style={{ color: C.accent, textDecoration: 'underline' }}>
-                  Report it
-                </Link>
-                . Never sign a document you don&apos;t recognise.
+                <strong style={{ fontWeight: 600 }}>{companyName}</strong>
+                {companyRest.map((part) => (
+                  <Fragment key={part}>
+                    {' · '}
+                    {part}
+                  </Fragment>
+                ))}
               </Text>
-            )}
 
-            <Text
-              className="ys-b-soft"
-              style={{
-                margin: 0,
-                fontFamily: F.body,
-                fontSize: '13px',
-                lineHeight: '20px',
-                color: C.inkSoft,
-                textAlign: 'center',
-              }}
-            >
-              <strong style={{ fontWeight: 600 }}>{companyName}</strong>
-              {companyRest.map((part) => (
-                <Fragment key={part}>
-                  {' · '}
-                  {part}
-                </Fragment>
-              ))}
-            </Text>
-
-            {websiteUrl && (
-              <Text
-                style={{
-                  margin: '4px 0 0',
-                  fontFamily: F.body,
-                  fontSize: '13px',
-                  lineHeight: '20px',
-                  textAlign: 'center',
-                }}
-              >
-                <Link className="ys-b-link" href={websiteUrl} style={{ color: C.accent, textDecoration: 'none' }}>
-                  {websiteLabel}
-                </Link>
-              </Text>
-            )}
-          </Section>
-        </Container>
+              {websiteUrl && (
+                <Text
+                  style={{
+                    margin: '4px 0 0',
+                    fontFamily: F.body,
+                    fontSize: '13px',
+                    lineHeight: '20px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Link className="ys-b-link" href={websiteUrl} style={{ color: C.accent, textDecoration: 'none' }}>
+                    {websiteLabel}
+                  </Link>
+                </Text>
+              )}
+            </Section>
+          </Container>
+        </Section>
       </Body>
     </Html>
   );
