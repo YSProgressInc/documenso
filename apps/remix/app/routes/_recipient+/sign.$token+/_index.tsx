@@ -28,6 +28,7 @@ import { getUserByEmail } from '@documenso/lib/server-only/user/get-user-by-emai
 import { DocumentAccessAuth } from '@documenso/lib/types/document-auth';
 import { isTspEnvelope } from '@documenso/lib/types/signature-level';
 import { extractDocumentAuthMethods } from '@documenso/lib/utils/document-auth';
+import { env } from '@documenso/lib/utils/env';
 import { isRecipientExpired } from '@documenso/lib/utils/recipients';
 import { prisma } from '@documenso/prisma';
 import { SigningCard3D } from '@documenso/ui/components/signing-card';
@@ -412,13 +413,17 @@ export const meta = ({ params }: Route.MetaArgs) => {
   const baseUrl = NEXT_PUBLIC_WEBAPP_URL();
   const ogImageUrl = `${baseUrl}/sign/${token}/opengraph`;
 
+  const brandName = env('NEXT_PUBLIC_BRAND_NAME');
+
   const title = i18n._(msg`A document is waiting for your signature`);
-  const description = i18n._(
-    msg`Review and sign this document securely from your browser with Documenso, the open source signing platform.`,
-  );
+  const description = brandName
+    ? i18n._(msg`Review and sign this document from ${brandName} securely in your browser.`)
+    : i18n._(
+        msg`Review and sign this document securely from your browser with Documenso, the open source signing platform.`,
+      );
 
   return [
-    { title: i18n._(msg`Sign Document - Documenso`) },
+    { title: i18n._(msg`Sign Document - ${brandName || 'Documenso'}`) },
     // A leaf `meta` export replaces the parent's, so the recipient layout's
     // robots tag has to be re-emitted here.
     { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet, noimageindex' },
@@ -504,7 +509,7 @@ const SigningPageV1 = ({ data }: { data: Awaited<ReturnType<typeof handleV1Loade
             <Link to="/" className="mt-36 text-documenso-700 hover:text-documenso-600">
               <Trans>Go Back Home</Trans>
             </Link>
-          ) : (
+          ) : env('NEXT_PUBLIC_BRAND_NAME') ? null : (
             <p className="mt-36 text-muted-foreground/60 text-sm">
               <Trans>
                 Want to send slick signing links like this one?{' '}
@@ -604,7 +609,7 @@ const SigningPageV2 = ({ data }: { data: Awaited<ReturnType<typeof handleV2Loade
             <Link to="/" className="mt-36 text-documenso-700 hover:text-documenso-600">
               <Trans>Go Back Home</Trans>
             </Link>
-          ) : (
+          ) : env('NEXT_PUBLIC_BRAND_NAME') ? null : (
             <p className="mt-36 text-muted-foreground/60 text-sm">
               <Trans>
                 Want to send slick signing links like this one?{' '}

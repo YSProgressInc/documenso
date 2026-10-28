@@ -25,6 +25,34 @@ const IMAGE_SIZE = {
  * sender's is the tightest because it shares the headline with a sentence of
  * surrounding copy, and a third headline line pushes the footer off the card.
  */
+// With NEXT_PUBLIC_BRAND_NAME set (a self-hosted, branded instance) the card uses
+// that brand's palette and its lockup from public/static/brand-certificate-logo.png.
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME;
+
+const THEME = BRAND_NAME
+  ? {
+      background: '#f7f3ec',
+      card: '#fffdf9',
+      line: '#e4ddd1',
+      ink: '#3c352d',
+      soft: '#62594f',
+      faint: '#857a6e',
+      accent: '#802c22',
+      accentText: '#f7f3ec',
+      logo: { file: 'static/brand-certificate-logo.png', alt: BRAND_NAME, width: 255, height: 44 },
+    }
+  : {
+      background: '#ffffff',
+      card: '#f8fafc',
+      line: '#e2e8f0',
+      ink: '#0f172a',
+      soft: '#475569',
+      faint: '#64748b',
+      accent: '#a2e771',
+      accentText: '#0f172a',
+      logo: { file: 'static/logo.png', alt: 'Documenso', width: 204, height: 30 },
+    };
+
 const TITLE_WIDTH_BUDGET = 110;
 const SENDER_WIDTH_BUDGET = 34;
 const RECIPIENT_WIDTH_BUDGET = 70;
@@ -127,7 +155,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
     loadAsset('fonts/inter-regular.ttf'),
     loadAsset('fonts/inter-semibold.ttf'),
     loadAsset('fonts/inter-bold.ttf'),
-    loadAsset('static/logo.png'),
+    loadAsset(THEME.logo.file),
   ]);
 
   const svg = await satori(
@@ -137,7 +165,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
         flexDirection: 'column',
         height: '100%',
         width: '100%',
-        backgroundColor: '#ffffff',
+        backgroundColor: THEME.background,
         padding: '72px 80px',
         fontFamily: cjkFamily ? `Inter, ${cjkFamily}` : 'Inter',
       }}
@@ -172,12 +200,12 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
                 width: '12px',
                 height: '12px',
                 borderRadius: '999px',
-                backgroundColor: '#a2e771',
+                backgroundColor: THEME.accent,
               }}
             />
             <span
               style={{
-                color: '#6b7280',
+                color: THEME.faint,
                 fontSize: '22px',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
@@ -193,7 +221,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            color: '#0f172a',
+            color: THEME.ink,
             fontSize: '48px',
             fontWeight: 700,
             lineHeight: 1.15,
@@ -212,13 +240,13 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
               marginTop: '32px',
               padding: '28px 32px',
               borderRadius: '16px',
-              border: '1px solid #e2e8f0',
-              backgroundColor: '#f8fafc',
+              border: `1px solid ${THEME.line}`,
+              backgroundColor: THEME.card,
             }}
           >
             <span
               style={{
-                color: '#64748b',
+                color: THEME.faint,
                 fontSize: '20px',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
@@ -229,7 +257,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
             </span>
             <span
               style={{
-                color: '#0f172a',
+                color: THEME.ink,
                 fontSize: '30px',
                 fontWeight: 600,
                 marginTop: '8px',
@@ -241,7 +269,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
             {content.detail.recipient ? (
               <span
                 style={{
-                  color: '#475569',
+                  color: THEME.soft,
                   fontSize: '22px',
                   marginTop: '16px',
                 }}
@@ -255,7 +283,7 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
         {content.subheadline ? (
           <span
             style={{
-              color: '#64748b',
+              color: THEME.faint,
               fontSize: '26px',
               marginTop: '20px',
             }}
@@ -275,7 +303,12 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
           flexShrink: 0,
         }}
       >
-        <img src={`data:image/png;base64,${logo.toString('base64')}`} alt="Documenso" width={204} height={30} />
+        <img
+          src={`data:image/png;base64,${logo.toString('base64')}`}
+          alt={THEME.logo.alt}
+          width={THEME.logo.width}
+          height={THEME.logo.height}
+        />
         {content.cta ? (
           <div
             style={{
@@ -284,8 +317,8 @@ const renderCard = async (content: CardContent, cjkFamily: string | null, cjkFon
               gap: '10px',
               padding: '14px 28px',
               borderRadius: '999px',
-              backgroundColor: '#a2e771',
-              color: '#0f172a',
+              backgroundColor: THEME.accent,
+              color: THEME.accentText,
               fontSize: '22px',
               fontWeight: 600,
             }}
@@ -343,11 +376,15 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
         headline:
           variant === 'signing-request'
             ? i18n._(msg`You have a document to sign`)
-            : i18n._(msg`Sign documents with Documenso`),
+            : BRAND_NAME
+              ? i18n._(msg`Documents from ${BRAND_NAME}`)
+              : i18n._(msg`Sign documents with Documenso`),
         subheadline:
           variant === 'signing-request'
             ? i18n._(msg`Open the link to review and sign it.`)
-            : i18n._(msg`The open source signing platform.`),
+            : BRAND_NAME
+              ? null
+              : i18n._(msg`The open source signing platform.`),
         detail: null,
         cta: variant === 'signing-request' ? i18n._(msg`Sign document`) : null,
       },
